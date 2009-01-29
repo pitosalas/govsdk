@@ -1,4 +1,3 @@
-require File.dirname(__FILE__) + '/test_helper'
 =begin
   * Name: GovSDK
   * Description: 
@@ -23,22 +22,6 @@ require File.dirname(__FILE__) + '/test_helper'
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
 =end
 
-class GovSdkTest < Test::Unit::TestCase
-  context "" do
-    setup do
-
-    end
-
-    should "Check error checking with invalid arg" do
-      assert_raise ArgumentError do
-        GovSdk.init(:xx => 1)
-      end
-    end
-    should "Check error checking with valid args" do
-      assert_nothing_raised ArgumentError do
-        GovSdk.init(:sunlight => 1, :opensecrets => 2)
-      end
-    end
-
-  end
-end
+require 'govsdk'
+require 'apimanagers'
+require 'congressperson'

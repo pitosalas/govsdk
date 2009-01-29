@@ -1,9 +1,44 @@
-govsdk
-======
+* Overview *
 
-Description goes here.
+* THIS IS INCOMPLETE. I AM STILL WORKING ON IT *
 
-COPYRIGHT
-=========
+* LICENSE *
 
-Copyright (c) 2008 Pito Salas. See LICENSE for details.
+GovSDK is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+GovSDK is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
+
+* INTRODUCTION *
+
+There are numerous 'government' APIs from various organizations. This SDK is a model for accessing all of them in a simple and consistent way. I will try to insulate users of this library from changes that might happen in one SDK or another, and where information is available from different sources, pick the source that seems to be the most authoritative at the time. The idea is that by using this API, the developer can stay blissfully unaware of the underlying APIs, as they evolve and change.
+
+* KEY IDEAS *
+
+** API Keys **
+
+Unfortunately for now, each of the different services request that you use it's own API key to get permission to access them. So right off the bat, there's a way that the abstraction will leak. It can't be helped, the user of this library will have to acquire API keys for the relevant services and supply them.
+
+** IDs **
+
+There are various IDs (identifiers assigned by some outside, real world agency to some outside real world thing) throughout the government. One you know is a drivers license number assigned to a person. Within our universe here are some of the IDs:
+
+	CrpId - Center for responsible politics IDs for congress persons
+	
+In many cases none of the APIs furnish a useful ID. 
+
+* KEY CLASSES *
+
+APIMgr - Parent class of each of the manager classes below
+	NewYorkTimesAPI - Class managing access to the New York Times API
+	SunlightAPI - Class managing access to the Sunlight API
+	OpenSecretsAPI - Class managing the OpenSecrets API
+	
+	Methods: setAPIKey/getAPIKey
+	
+CongressPerson - Work with legislators: senators and congressmen
+	
+	self.find_by_name - return an array of CongressPersons
+	self.find_by_zipcode - return an array of CongressPersons
+	self.find_by_crp_id - return the CongressPerson with specified crp id

@@ -1,4 +1,3 @@
-require File.dirname(__FILE__) + '/test_helper'
 =begin
   * Name: GovSDK
   * Description: 
@@ -23,22 +22,12 @@ require File.dirname(__FILE__) + '/test_helper'
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
 =end
 
-class GovSdkTest < Test::Unit::TestCase
-  context "" do
-    setup do
+require 'rubygems'
+require 'govsdkgem'
 
-    end
+# You always have to start off by declaring that you want to use Govtsdk
+GovSdk.init :opensecrets => "09c975b6d3f19eb865805b2244311065", :sunlight => "4ffa22917ab1ed010a8e681c550c9593"
 
-    should "Check error checking with invalid arg" do
-      assert_raise ArgumentError do
-        GovSdk.init(:xx => 1)
-      end
-    end
-    should "Check error checking with valid args" do
-      assert_nothing_raised ArgumentError do
-        GovSdk.init(:sunlight => 1, :opensecrets => 2)
-      end
-    end
+franks = CongressPerson.find_by_name("Frank")
+franks.each { |cp| puts "Congressman: #{cp.firstname} #{cp.lastname} reported holding #{cp.get_positions_held(2008).length} positions in 2008"}
 
-  end
-end
