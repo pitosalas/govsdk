@@ -37,7 +37,7 @@ class TestAPIs < Test::Unit::TestCase
   context "Sunlight API" do
     setup do      
       GovSdk.load_apis
-      GovSdk.sunlight_api.set_apikey("4ffa22917ab1ed010a8e681c550c9593")
+      GovSdk.sunlight_api.key = "4ffa22917ab1ed010a8e681c550c9593"
     end
 
     should "be initialized once APIkey is set" do
@@ -75,7 +75,7 @@ class TestAPIs < Test::Unit::TestCase
   context "OpenSecrets API manager" do
     setup do
       GovSdk.load_apis
-      GovSdk.opensecrets_api.set_apikey("09c975b6d3f19eb865805b2244311065")
+      GovSdk.opensecrets_api.key = "09c975b6d3f19eb865805b2244311065"
       @os_api = GovSdk.opensecrets_api
     end
 
@@ -101,8 +101,7 @@ class TestAPIs < Test::Unit::TestCase
     
     should "locate list of positions held for N00000308 and check the count" do
       assert_equal 4, @os_api.get_cand_pfd_positions_held("N00000308", cycle = "").length
-      
-      pp @os_api.get_cand_pfd_positions_held("N00000019", cycle = "").length
+      assert_equal 2, @os_api.get_cand_pfd_positions_held("N00000019", cycle = "").length
     end
     
   end

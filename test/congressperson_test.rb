@@ -28,7 +28,7 @@ class CongressPersonTest < Test::Unit::TestCase
   context "In basic CongressPerson cases" do
     setup do
       GovSdk.load_apis
-      GovSdk.sunlight_api.set_apikey("4ffa22917ab1ed010a8e681c550c9593")
+      GovSdk.sunlight_api.key = "4ffa22917ab1ed010a8e681c550c9593"
       @cpnone = CongressPerson.find_by_name("Pito Salas")
       @cpkennedy = CongressPerson.find_by_name("Kennedy")
       @cpkennedy[0].nickname == "Ted" ? @ted_crp_id = @cpkennedy[0].crp_id : @ted_crp_id = @cpkennedy[1].crp_id
@@ -62,7 +62,7 @@ class CongressPersonTest < Test::Unit::TestCase
 
     context "Get fundraising summary for N00000308" do
       setup do
-        GovSdk.opensecrets_api.set_apikey("09c975b6d3f19eb865805b2244311065")
+        GovSdk.opensecrets_api.key = "09c975b6d3f19eb865805b2244311065"
         @mycandidate = CongressPerson.find_by_crp_id("N00000308")
       end
 
@@ -77,7 +77,7 @@ class CongressPersonTest < Test::Unit::TestCase
 
     context "Get a look at positions held detail for N00000360 and Clinton" do
       setup do
-        GovSdk.opensecrets_api.set_apikey("09c975b6d3f19eb865805b2244311065")
+        GovSdk.opensecrets_api.key = "09c975b6d3f19eb865805b2244311065"
         @mycandidate = CongressPerson.find_by_crp_id("N00000360")
         @nopositioncandidate = CongressPerson.find_by_name("Clinton")
       end
@@ -95,7 +95,7 @@ class CongressPersonTest < Test::Unit::TestCase
     
     context "Try some other odd cases" do
       setup do
-        GovSdk.opensecrets_api.set_apikey("09c975b6d3f19eb865805b2244311065")
+        GovSdk.opensecrets_api.key = "09c975b6d3f19eb865805b2244311065"
         @franks = CongressPerson.find_by_name("Frank")[0]
       end
 

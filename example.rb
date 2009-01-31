@@ -25,9 +25,18 @@
 require 'rubygems'
 require 'govsdkgem'
 
-# You always have to start off by declaring that you want to use Govtsdk
+# You always have to start off by declaring that you want to use Govsdk. You need to supply one or more
+# of your API keys. 
 GovSdk.init :opensecrets => "09c975b6d3f19eb865805b2244311065", :sunlight => "4ffa22917ab1ed010a8e681c550c9593"
 
-franks = CongressPerson.find_by_name("Frank")
-franks.each { |cp| puts "Congressman: #{cp.firstname} #{cp.lastname} reported holding #{cp.get_positions_held(2008).length} positions in 2008"}
+# Lets start by looking for congress people with "Frank" in their name. We iterate through the resultant array
+# and display some factoids about each of the congressmen found
+
+the_franks = CongressPerson.find_by_name("Frank")
+the_franks.each do |cp| 
+  puts "Congressman: #{cp.firstname} #{cp.lastname} has crp_id #{cp.crp_id}." 
+  puts "    He or she reported holding #{cp.get_positions_held(2008).length} positions in 2008"
+end
+
+# Within govsdk we've chosen to use the Center for Responsive Politics ID to indicate a particular Congressperson
 

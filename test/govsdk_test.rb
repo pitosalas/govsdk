@@ -1,4 +1,3 @@
-require File.dirname(__FILE__) + '/test_helper'
 =begin
   * Name: GovSDK
   * Description: 
@@ -22,6 +21,8 @@ require File.dirname(__FILE__) + '/test_helper'
   You should have received a copy of the GNU General Public License
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
 =end
+
+require File.dirname(__FILE__) + '/test_helper'
 
 class GovSdkTest < Test::Unit::TestCase
   context "" do

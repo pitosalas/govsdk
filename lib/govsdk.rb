@@ -28,7 +28,6 @@
 #Debugger.start
 
 class GovSdk
-  attr_reader :sunl_api, :opens_api
 
   def self.load_apis
     @sunl_api = Sunlight.new
@@ -43,14 +42,18 @@ class GovSdk
     @opens_api
   end
   
-  def self.init apikeys = {}
-    apikeys.keys.each { |x| raise ArgumentError unless [:sunlight, :opensecrets].include?(x) }
+  def self.followmoney_api
+    @followm_api
+  end
+  
+  def self.init(apikeys = {})
+    apikeys.keys.each { |x| raise ArgumentError unless [:followmoney, :sunlight, :opensecrets].include?(x) }
     GovSdk.load_apis
     apikeys.each do |key, val|
-      @sunl_api.set_apikey(val) if key == :sunlight
-      @opens_api.set_apikey(val) if key == :opensecrets
+      @sunl_api.key = val if key == :sunlight
+      @opens_api.key = val if key == :opensecrets
+      @followm_api.key = val if key == :followmoney
     end
   end
   
 end
-

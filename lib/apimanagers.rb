@@ -35,7 +35,7 @@ require 'net/http'
 class GenericAPI  
   
   def initialized?
-    @api_key != nil || @api_key.class == String
+    !@api_key.nil? || @api_key.kind_of?(String)
   end
   
 end
@@ -48,11 +48,11 @@ class Sunlight < GenericAPI
 
   def legislators_search(params)
     result = Sunlight.get("/api/legislators.search", :query => {:name => params})
-    result = result["response"]["results"]
+    result["response"]["results"]
   end
   
   # Simply declare and remember the API Key
-  def set_apikey(key)
+  def key=(key)
     @api_key = key
     Sunlight.default_params :apikey => key
   end
@@ -61,11 +61,11 @@ class Sunlight < GenericAPI
   def legislators_get(params)
     begin
       result = Sunlight.get("/api/legislators.get", :query => params)
+      result = result["response"]["legislator"]
     rescue Net::HTTPServerException => exception
       puts "EXCEPTION: from Sunlight - legislators.get: #{exception.response.body}"
       return nil
     end
-    result = result["response"]["legislator"]
   end
   
 end
@@ -76,52 +76,38 @@ class OpenSecrets < GenericAPI
   base_uri "www.opensecrets.org/api/"
   format :xml
 
-  def set_apikey(key)
+  def key=(key)
     @api_key = key
     OpenSecrets.default_params :apikey => key
   end
   
-  def get_cand_summary_for_crpID(crpID, cycle = "")
-    queryhash = {:method => "candsummary"}
+  def get_cand_info(method_name, crpID, cycle)
+    query_hash = {:method => method_name}
     begin
-      result = OpenSecrets.get("", :query => queryhash.merge({:cid => crpID, :cycle => cycle}))
+      result = OpenSecrets.get("", :query => query_hash.merge({:cid => crpID, :cycle => cycle}))
     rescue Net::HTTPServerException => exception
-      puts "EXCEPTION: from Opensecrets - candSummary.get: #{exception.response.body}"
+      puts "EXCEPTION: from Opensecrets! #{method_name}: #{exception.response.body}"
       return nil
     end
+  end
+  
+  def get_cand_summary_for_crpID(crpID, cycle = "")
+    result = get_cand_info("candSummary", crpID, cycle)
     result["response"]["summary"]
   end
   
   def get_cand_pfd_assets(crpID, cycle = "")
-    queryhash = {:method => "memPFDprofile"}
-    begin
-      result = OpenSecrets.get("", :query => queryhash.merge({:cid => crpID, :cycle => cycle}))
-    rescue Net::HTTPServerException => exception
-      puts "EXCEPTION: from Opensecrets - candSummary.get: #{exception.response.body}"
-      return nil
-    end
+    result = get_cand_info("memPFDprofile", crpID, cycle)
     result["response"]["member_profile"]["assets"]["asset"]
   end
   
   def get_cand_pfd_transactions(crpID, cycle = "")
-    queryhash = {:method => "memPFDprofile"}
-    begin
-      result = OpenSecrets.get("", :query => queryhash.merge({:cid => crpID, :cycle => cycle}))
-    rescue Net::HTTPServerException => exception
-      puts "EXCEPTION: from Opensecrets - candSummary.get: #{exception.response.body}"
-      return nil
-    end
+    result = get_cand_info("memPFDprofile", crpID, cycle)
     result["response"]["member_profile"]["transactions"]["transaction"]
   end
   
   def get_cand_pfd_positions_held(crpID, cycle = "")
-    queryhash = {:method => "memPFDprofile"}
-    begin
-      result = OpenSecrets.get("", :query => queryhash.merge({:cid => crpID, :cycle => cycle}))
-    rescue Net::HTTPServerException => exception
-      puts "EXCEPTION: from Opensecrets - candSummary.get: #{exception.response.body}"
-      return nil
-    end
+    result = get_cand_info("memPFDprofile", crpID, cycle)
     result = result["response"]["member_profile"]
     if result.has_key?("positions")
       result["positions"]["position"]
@@ -129,7 +115,6 @@ class OpenSecrets < GenericAPI
       nil
     end
   end
-    
 end
 
 
