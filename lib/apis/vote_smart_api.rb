@@ -22,8 +22,32 @@
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
 =end
 
-require 'govsdk'
-require 'govsdk_base'
-require 'congress_person'
-require 'open_secrets_api'
-require 'vote_smart_api'
+require 'generic_api'
+
+class VoteSmartApi < GenericAPI
+  include HTTParty
+  VoteSmart.base_uri "services.sunlightlabs.com"
+
+  def legislators_search(params)
+    result = Sunlight.get("/api/legislators.search", :query => {:name => params})
+    result["response"]["results"]
+  end
+  
+  # Simply declare and remember the API Key
+  def key=(key)
+    @api_key = key
+    Sunlight.default_params :apikey => key
+  end
+
+  # Call any of the various legal Sunlight queries
+  def legislators_get(params)
+    begin
+      result = Sunlight.get("/api/legislators.get", :query => params)
+      result = result["response"]["legislator"]
+    rescue Net::HTTPServerException => exception
+      puts "EXCEPTION: from Sunlight - legislators.get: #{exception.response.body}"
+      return nil
+    end
+  end
+  
+end

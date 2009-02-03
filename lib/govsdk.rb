@@ -30,8 +30,8 @@
 class GovSdk
 
   def self.load_apis
-    @sunl_api = Sunlight.new
-    @opens_api = OpenSecrets.new
+    @sunl_api = SunlightApi.new
+    @opens_api = OpenSecretsApi.new
   end
   
   def self.sunlight_api

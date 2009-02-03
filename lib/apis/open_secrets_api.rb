@@ -21,57 +21,9 @@
   You should have received a copy of the GNU General Public License
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
 =end
-
-require 'rubygems'
-require 'httparty'
-require 'cgi'
-require 'net/http'
-
-#require "ruby-debug"
-#Debugger.settings[:autolist] = 1 # list nearby lines on stop
-#Debugger.settings[:autoeval] = 1
-#Debugger.start
-
-class GenericAPI  
-  
-  def initialized?
-    !@api_key.nil? || @api_key.kind_of?(String)
-  end
-  
-end
-
-# Control Access to Sunlight API.
-
-class Sunlight < GenericAPI
-  include HTTParty
-  Sunlight.base_uri "services.sunlightlabs.com"
-
-  def legislators_search(params)
-    result = Sunlight.get("/api/legislators.search", :query => {:name => params})
-    result["response"]["results"]
-  end
-  
-  # Simply declare and remember the API Key
-  def key=(key)
-    @api_key = key
-    Sunlight.default_params :apikey => key
-  end
-
-  # Call any of the various legal Sunlight queries
-  def legislators_get(params)
-    begin
-      result = Sunlight.get("/api/legislators.get", :query => params)
-      result = result["response"]["legislator"]
-    rescue Net::HTTPServerException => exception
-      puts "EXCEPTION: from Sunlight - legislators.get: #{exception.response.body}"
-      return nil
-    end
-  end
-  
-end
-
+require 'genericapi.rb'
 # Control Access to OpenSecrets API.
-class OpenSecrets < GenericAPI
+class OpenSecretsApi < GenericApi
   include HTTParty
   base_uri "www.opensecrets.org/api/"
   format :xml
@@ -116,9 +68,4 @@ class OpenSecrets < GenericAPI
     end
   end
 end
-
-
-
-  
-
 

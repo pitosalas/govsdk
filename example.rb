@@ -36,6 +36,7 @@ the_franks = CongressPerson.find_by_name("Frank")
 the_franks.each do |cp| 
   puts "Congressman: #{cp.firstname} #{cp.lastname} has crp_id #{cp.crp_id}." 
   puts "    He or she reported holding #{cp.get_positions_held(2008).length} positions in 2008"
+  puts "    Votesmart ID is #{cp.votesmart_id}, photo can be found here: #{cp.photo_url}"
 end
 
 # Within govsdk we've chosen to use the Center for Responsive Politics ID to indicate a particular Congressperson

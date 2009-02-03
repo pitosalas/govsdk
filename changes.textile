@@ -1,0 +1,8 @@
+h1. Changes
+h2. First draft
+* Just writing and structuring basic model
+* Gem 0.0.1
+h2. 0.0.2
+* Change readme etc to textile
+* Add CongreessPerson.photo_url
+

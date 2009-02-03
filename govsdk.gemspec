@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pito Salas"]
-  s.date = %q{2009-01-30}
+  s.date = %q{2009-02-02}
   s.description = %q{TODO}
   s.email = %q{rps@salas.com}
-  s.files = ["VERSION.yml", "lib/apimanagers.rb", "lib/congress_person.rb", "lib/govsdk.rb", "lib/govsdkgem.rb", "lib/template.rb", "test/apimanagers_test.rb", "test/congressperson_test.rb", "test/govsdk_test.rb", "test/test_helper.rb"]
+  s.files = ["README.textile", "VERSION.yml", "lib/apimanagers.rb", "lib/congress_person.rb", "lib/genericapi.rb", "lib/govsdk.rb", "lib/govsdk_base.rb", "lib/govsdkgem.rb", "lib/opensecrets.rb", "lib/template.rb", "lib/votesmartapi.rb", "test/apimanagers_test.rb", "test/congressperson_test.rb", "test/govsdk_test.rb", "test/test_helper.rb"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/pitosalas/govsdk}
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]

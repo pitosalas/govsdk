@@ -20,6 +20,12 @@
 
   You should have received a copy of the GNU General Public License
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
+
+  require "ruby-debug"
+  Debugger.settings[:autolist] = 1 # list nearby lines on stop
+  Debugger.settings[:autoeval] = 1
+  Debugger.start
+
 =end
 
 require File.dirname(__FILE__) + '/test_helper'
@@ -57,6 +63,11 @@ class CongressPersonTest < Test::Unit::TestCase
 
       should "crpid should be for ted kennedy" do
         assert_equal "Ted", @cpteddy.nickname
+      end
+      
+      should "have votesmart_id for Ted Kennedy one" do
+        assert_equal "53305", @cpteddy.votesmart_id
+        assert_equal "http://www.votesmart.org/canphoto/53305.jpg", @cpteddy.photo_url
       end
     end
 
@@ -103,6 +114,7 @@ class CongressPersonTest < Test::Unit::TestCase
         assert_equal 0, @franks.get_positions_held(2008).length        
       end
     end
+    
     
     
   end

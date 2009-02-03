@@ -20,4 +20,19 @@
 
   You should have received a copy of the GNU General Public License
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
+  
+  require "ruby-debug"
+  Debugger.settings[:autolist] = 1 # list nearby lines on stop
+  Debugger.settings[:autoeval] = 1
+  Debugger.start
+  
 =end
+
+class GovSdkBase
+
+# General error checking and reporting methods
+  def not_blank val, message
+    raise ArgumentError, (message + caller.shift) unless val.nil? || val.kind_of?(String)
+  end
+  
+end

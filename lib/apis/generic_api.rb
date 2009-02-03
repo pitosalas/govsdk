@@ -22,8 +22,15 @@
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
 =end
 
-require 'govsdk'
-require 'govsdk_base'
-require 'congress_person'
-require 'open_secrets_api'
-require 'vote_smart_api'
+#require "ruby-debug"
+#Debugger.settings[:autolist] = 1 # list nearby lines on stop
+#Debugger.settings[:autoeval] = 1
+#Debugger.start
+
+class GenericApi  
+  
+  def initialized?
+    !@api_key.nil? || @api_key.kind_of?(String)
+  end
+  
+end
