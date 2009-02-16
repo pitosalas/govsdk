@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>find_by_crp_id (CongressPerson)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/congress_person.rb, line 86</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">find_by_crp_id</span>(<span class="ruby-identifier">crpId</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">'Crp-Id should be a string'</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">crpId</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">String</span>)
+    <span class="ruby-identifier">sunlight_hash</span> = <span class="ruby-constant">GovSdk</span>.<span class="ruby-identifier">sunlight_api</span>.<span class="ruby-identifier">legislators_get</span>(<span class="ruby-identifier">:crp_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">crpId</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">sunlight_hash</span>.<span class="ruby-identifier">nil?</span>
+      <span class="ruby-identifier">cong_person</span> = <span class="ruby-constant">CongressPerson</span>.<span class="ruby-identifier">new</span>
+      <span class="ruby-identifier">copy_sun_properties</span>(<span class="ruby-identifier">sunlight_hash</span>, <span class="ruby-identifier">cong_person</span>)
+      <span class="ruby-identifier">cong_person</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

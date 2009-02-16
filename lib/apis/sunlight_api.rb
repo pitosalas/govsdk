@@ -23,10 +23,9 @@
 =end
 
 require 'rubygems'
-require 'httparty'
 require 'cgi'
 require 'net/http'
-require 'genericapi'
+require 'generic_api'
 
 # Control Access to Sunlight API.
 
@@ -45,7 +44,7 @@ class SunlightApi < GenericApi
     SunlightApi.default_params :apikey => key
   end
 
-  # Call any of the various legal Sunlight queries
+  # Call Sunlight queries returning a single legislator matching a query
   def legislators_get(params)
     begin
       result = SunlightApi.get("/api/legislators.get", :query => params)
@@ -56,11 +55,16 @@ class SunlightApi < GenericApi
     end
   end
   
-end
-
-
-
-
+  # Sunlight query returning an array of matching legislators
+  def legislators_getlist(params)
+    begin
+      result = SunlightApi.get("/api/legislators.getList", :query => params)
+      result = result["response"]["legislators"]
+    rescue Net::HTTPServerException => exception
+      puts "EXCEPTION: from Sunlight - legislators.getList: #{exception.response.body}"
+      return nil
+    end
+  end
   
-
-
+  
+end

@@ -1,6 +1,6 @@
 =begin
-  * Name: GovSDK
-  * Description: 
+  * Name: govsdkgem.rb
+  * Description: Gem root 'require' file for govsdk
   * Author: Pito Salas
   * Copyright: (c) R. Pito Salas and Associates, Inc.
   * Date: January 2009
@@ -22,8 +22,13 @@
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
 =end
 
+$LOAD_PATH.unshift(File.dirname(__FILE__)+"/../lib/apis")
+
 require 'govsdk'
 require 'govsdk_base'
-require 'congress_person'
 require 'open_secrets_api'
+require 'congress_person'
 require 'vote_smart_api'
+require 'google_api'
+require 'sunlight_api'
+require 'opmloco'

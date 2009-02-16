@@ -1,0 +1,6 @@
+h2. Todo
+* Error reporting when one or more apis are not set up is bad
+* Make govsdk and friends into a true singleton
+* Move opmlassist into it's own gem
+
+h2. Done

@@ -31,8 +31,24 @@
 class GovSdkBase
 
 # General error checking and reporting methods
-  def not_blank val, message
+  def assume_not_blank val, message
     raise ArgumentError, (message + caller.shift) unless val.nil? || val.kind_of?(String)
+  end
+  
+  def assume_uses_google_api
+    raise ArgumentError, "Call requires Google API and Google key" + called.shift unless GovSdk.google_api.initialized?
+  end
+  
+  def assume_nil_or_integer val
+    raise ArgumentError, "Requires nil or integer argument. Called from " + called.shift unless  val.nil? || val.kind_of?(Integer)
+  end
+  
+  def self.assume_hash val
+    raise ArgumentError, "Requires a hash argument. Called from " + called.shift unless val.kind_of?(Hash)
+  end    
+  
+  def assume_hash val
+    self.assume_hash val
   end
   
 end

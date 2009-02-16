@@ -1,6 +1,6 @@
 =begin
-  * Name: GovSDK
-  * Description: 
+  * Name: vote_smart_api.rb
+  * Description: GovSdk support for votesmart api
   * Author: Pito Salas
   * Copyright: (c) R. Pito Salas and Associates, Inc.
   * Date: January 2009
@@ -24,30 +24,45 @@
 
 require 'generic_api'
 
-class VoteSmartApi < GenericAPI
+class VoteSmartApi < GenericApi
   include HTTParty
-  VoteSmart.base_uri "services.sunlightlabs.com"
+  VoteSmartApi.base_uri "http://api.votesmart.org"
+  format :xml
 
-  def legislators_search(params)
-    result = Sunlight.get("/api/legislators.search", :query => {:name => params})
-    result["response"]["results"]
-  end
-  
   # Simply declare and remember the API Key
   def key=(key)
     @api_key = key
-    Sunlight.default_params :apikey => key
+    VoteSmartApi.default_params :key => key
   end
-
-  # Call any of the various legal Sunlight queries
-  def legislators_get(params)
+  
+  def get_votesmart_candidate(method_name, query)
     begin
-      result = Sunlight.get("/api/legislators.get", :query => params)
-      result = result["response"]["legislator"]
+      result = VoteSmartApi.get(method_name, query)
     rescue Net::HTTPServerException => exception
-      puts "EXCEPTION: from Sunlight - legislators.get: #{exception.response.body}"
+      puts "\nEXCEPTION: from votesmart_api #{method_name}: #{exception.response.body}"
       return nil
+    end
+    if result.has_key?("error")
+      puts "\nERROR: from votesmart_api #{method_name}: #{result["error"]["errorMessage"]}"
+      return nil
+    else
+      result["candidateList"]["candidate"]
     end
   end
   
+  def candidate_fuzzy_find(lastname)
+    get_votesmart_candidate("/Candidates.getByLevenstein", :query => {:lastName => lastname})
+  end
+
+  def officials_fuzzy_find(lastname)
+    get_votesmart_candidate("/Officials.getByLevenstein", :query => {:lastName => lastname})
+  end
+
+  def candidate_getBio(candidateId)
+    get_votesmart_candidate("/Candidate.getBio", :query => {:candidateId => candidateId})
+  end
+  
+  def candidate_find_for_office_and_state(office, state)
+    get_votesmart_candidate("/Candidate.getByOfficeState", :query => {:officeId => office, :stateId => state})
+  end
 end

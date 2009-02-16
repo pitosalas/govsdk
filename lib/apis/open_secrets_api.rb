@@ -21,8 +21,8 @@
   You should have received a copy of the GNU General Public License
   along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
 =end
-require 'genericapi.rb'
-# Control Access to OpenSecrets API.
+require 'generic_api'
+
 class OpenSecretsApi < GenericApi
   include HTTParty
   base_uri "www.opensecrets.org/api/"
@@ -30,13 +30,13 @@ class OpenSecretsApi < GenericApi
 
   def key=(key)
     @api_key = key
-    OpenSecrets.default_params :apikey => key
+    OpenSecretsApi.default_params :apikey => key
   end
   
   def get_cand_info(method_name, crpID, cycle)
     query_hash = {:method => method_name}
     begin
-      result = OpenSecrets.get("", :query => query_hash.merge({:cid => crpID, :cycle => cycle}))
+      result = OpenSecretsApi.get("", :query => query_hash.merge({:cid => crpID, :cycle => cycle}))
     rescue Net::HTTPServerException => exception
       puts "EXCEPTION: from Opensecrets! #{method_name}: #{exception.response.body}"
       return nil

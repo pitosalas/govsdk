@@ -68,19 +68,25 @@ class CongressPerson < GovSdkBase
   
   def self.convert_to_congressperson(sunlight_legislator)
     cong_person = CongressPerson.new
-    leg_hash = sunlight_legislator["result"]["legislator"]
+    leg_hash = sunlight_legislator
     copy_sun_properties(leg_hash, cong_person)
     cong_person
   end
 
-  def self.find_by_name(name)
+  def self.fuzzy_find_by_name(name)
     raise ArgumentError, 'names must be Strings' unless name.is_a?(String)
     sunlight_hash = GovSdk.sunlight_api.legislators_search(name)
-    sunlight_hash.collect {|leg| convert_to_congressperson(leg)}
+    sunlight_hash.collect {|leg| convert_to_congressperson(leg["result"]["legislator"])}
   end
 
   def self.find_by_zipcode(zip)
     raise ArgumentError, 'zipcodes must be Strings' unless zip.is_a?(String)
+  end
+  
+  def self.find_by_query(query)
+    assume_hash query
+    result_array = GovSdk.sunlight_api.legislators_getlist(query)
+    result_array.collect { |leg| convert_to_congressperson(leg["legislator"])}
   end
   
   def self.find_by_crp_id(crpId)
@@ -102,7 +108,7 @@ class CongressPerson < GovSdkBase
   end
   
   def get_positions_held(electionCycle = nil)
-    raise ArgumentError, 'election cycle should be nil or an integer' unless electionCycle.nil? || electionCycle.kind_of?(Integer)
+    assume_nil_or_integer electionCycle
     positions = GovSdk.opensecrets_api.get_cand_pfd_positions_held(crp_id, electionCycle)
     if positions.class == Array
       return positions.collect {|pos| Positions.new(pos)}
@@ -115,8 +121,20 @@ class CongressPerson < GovSdkBase
   
   # Return url to the photo of this Congress Person. This method uses the votesmart.org/candphoto/1234.jpg resource
   def photo_url
-    not_blank votesmart_id, "Votesmart_id cannot be blank when calling get_photo_url"
+    assume_not_blank votesmart_id, "Votesmart_id cannot be blank when calling get_photo_url"
     "http://www.votesmart.org/canphoto/#{@votesmart_id}.jpg"
+  end
+  
+  # Return url of the Congress Person's web site, or nil if we can't find one. 
+  def blog_url
+    assume_uses_google_api
+    return nil if website.nil?
+    blog = GovSdk.google_api.lookup_feed_url(website)
+    if blog.nil? || blog.empty?
+      nil
+    else
+      blog
+    end
   end
 end
 
@@ -132,6 +150,8 @@ class FundraisingSummary
     "debt"          => "debt"
   }
   
+  # Given a hash of FundraisingSummary values from the OpenSecrets API, populate the corresponding
+  # instance variables in this instance. 
   def initialize(init_hash)
     OPENS_FUNSUMMARY_MAP.each do |name, attribute| 
       val = init_hash[attribute]
@@ -150,6 +170,8 @@ class Positions
     "organization"  => "organization"
   }
   
+  # Given a hash of Positions values from the OpenSecrets API, populate the corresponding
+  # instance variables in this instance. 
   def initialize(init_hash)
     OPENS_POS_MAP.each do |name, attribute| 
       val = init_hash[attribute]
@@ -157,6 +179,8 @@ class Positions
     end
   end
   
+  # Pretty print this instance. This method is called behind the scenes when a Position
+  # is encountered during a PP traversal of objects.
   def pretty_print(pp)
     pp.text("position #{title} at #{organization}")
   end

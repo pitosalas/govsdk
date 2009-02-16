@@ -1,0 +1,56 @@
+=begin
+  * Name: google_api.rb
+  * Description: Interfaces to Google APIs
+  * Author: Pito Salas
+  * Copyright: (c) R. Pito Salas and Associates, Inc.
+  * Date: January 2009
+  * License: GPL
+
+  This file is part of GovSDK.
+
+  GovSDK is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  GovSDK is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with GovSDK.  If not, see <http://www.gnu.org/licenses/>.
+  
+  require "ruby-debug"
+  Debugger.settings[:autolist] = 1 # list nearby lines on stop
+  Debugger.settings[:autoeval] = 1
+  Debugger.start
+  
+=end
+
+require 'generic_api'
+
+class GoogleApi < GenericApi
+  include HTTParty
+  GoogleApi.base_uri "http://ajax.googleapis.com/ajax/services"
+  format :json
+
+  # Simply declare and remember the API Key
+  def key=(key)
+    @api_key = key
+    GoogleApi.default_params(:key => key, :v => '1.0')
+  end
+  
+  def lookup_feed_url(page_url)
+    begin
+      result = GoogleApi.get("/feed/lookup", :query => {:q => page_url})
+    rescue Net::HTTPServerException => exception
+      puts "\nEXCEPTION: from GoogleApi::lookup_feed_url: #{exception.response.body}"
+      return nil
+    end
+    resp = result["responseData"]
+    resp.nil? ? nil : resp["url"]
+  end
+    
+end
+

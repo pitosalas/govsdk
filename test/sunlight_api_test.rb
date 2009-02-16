@@ -37,21 +37,28 @@ class SunlightApiTest < Test::Unit::TestCase
   context "Sunlight API" do
     setup do      
       GovSdk.load_apis
-      GovSdk.sunlight_api.key = "4ffa22917ab1ed010a8e681c550c9593"
+      @slight = GovSdk.sunlight_api
+      @slight.key = "4ffa22917ab1ed010a8e681c550c9593"
     end
 
     should "be initialized once APIkey is set" do
-      assert_equal true, GovSdk.sunlight_api.initialized?
+      assert_equal true, @slight.initialized?
     end
     
     should "return no legislator called Pito Salas" do
-      result = GovSdk.sunlight_api.legislators_search("Pito Salas")
+      result = @slight.legislators_search("Pito Salas")
       assert_equal 0, result.length        
     end
     
     should "return a single legislator called Ted Kennedy" do    
-      result = GovSdk.sunlight_api.legislators_search("Ted Kennedy")
+      result = @slight.legislators_search("Ted Kennedy")
       assert 1, result.length
+    end
+    
+    should "find that there are 2 legislators called Kennedy" do
+      result = @slight.legislators_getlist(:lastname => "Kennedy")
+      pp result
+      assert 2, result.length
     end
     
     should "return a single legislator with the nickname ted" do

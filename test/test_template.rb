@@ -1,6 +1,7 @@
+require File.dirname(__FILE__) + '/test_helper'
 =begin
-  * Name: GovSDK
-  * Description: 
+  * Name: test_template.rb
+  * Description: Template for GovSdk Tests
   * Author: Pito Salas
   * Copyright: (c) R. Pito Salas and Associates, Inc.
   * Date: January 2009
@@ -25,5 +26,15 @@
   Debugger.settings[:autolist] = 1 # list nearby lines on stop
   Debugger.settings[:autoeval] = 1
   Debugger.start
-  
 =end
+
+class MyTest < Test::Unit::TestCase
+  context "Test context" do
+    setup do
+      
+    end
+
+    should "do something" do
+      assert_equal 1,1
+    end
+  end

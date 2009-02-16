@@ -4,5 +4,6 @@ h2. First draft
 * Gem 0.0.1
 h2. 0.0.2
 * Change readme etc to textile
-* Add CongreessPerson.photo_url
+* Add CongreesPerson.photo_url
+* Add CongressPerson.find_blog_url
 

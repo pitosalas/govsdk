@@ -30,29 +30,37 @@
 class GovSdk
 
   def self.load_apis
-    @sunl_api = SunlightApi.new
-    @opens_api = OpenSecretsApi.new
+    @sunlight_api = SunlightApi.new
+    @opensecrets_api = OpenSecretsApi.new
+    @votesmart_api = VoteSmartApi.new
+    @google_api = GoogleApi.new
+  end
+  
+  def self.votesmart_api
+    @votesmart_api
   end
   
   def self.sunlight_api
-    @sunl_api
+    @sunlight_api
   end
   
   def self.opensecrets_api
-    @opens_api
+    @opensecrets_api
   end
   
-  def self.followmoney_api
-    @followm_api
+  def self.google_api
+    @google_api
   end
-  
+    
   def self.init(apikeys = {})
-    apikeys.keys.each { |x| raise ArgumentError unless [:followmoney, :sunlight, :opensecrets].include?(x) }
+    apikeys.keys.each { |x| raise ArgumentError unless [:google, :followmoney, :sunlight, :opensecrets, :votesmart].include?(x) }
     GovSdk.load_apis
     apikeys.each do |key, val|
-      @sunl_api.key = val if key == :sunlight
-      @opens_api.key = val if key == :opensecrets
+      @sunlight_api.key = val if key == :sunlight
+      @opensecrets_api.key = val if key == :opensecrets
       @followm_api.key = val if key == :followmoney
+      @votesmart_api.key = val if key == :votesmart
+      @google_api.key = val if key == :google
     end
   end
   
