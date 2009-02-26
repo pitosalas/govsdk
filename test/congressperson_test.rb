@@ -35,6 +35,8 @@ class CongressPersonTest < Test::Unit::TestCase
     setup do
       GovSdk.load_apis
       GovSdk.sunlight_api.key = "4ffa22917ab1ed010a8e681c550c9593"
+      GovSdk.google_api.key = "ABQIAAAAyvWaJgF_91PvBZhITx5FDxRIYAcXj39F4zFQfQ2X3IEFURxvMRRUi0aCG6WofnUSRRoI-Pgytm5yUA"
+      
       @cpnone = CongressPerson.fuzzy_find_by_name("Pito Salas")
       @cpkennedy = CongressPerson.fuzzy_find_by_name("Kennedy")
       @cpkennedy[0].nickname == "Ted" ? @ted_crp_id = @cpkennedy[0].crp_id : @ted_crp_id = @cpkennedy[1].crp_id
@@ -49,6 +51,13 @@ class CongressPersonTest < Test::Unit::TestCase
       @cpkennedy.each do |a_kennedy|
         assert ["Edward", "Patrick Joseph"].include? a_kennedy.firstname
       end
+    end
+    
+    should "locate barney frank by first and last name" do
+      cp = CongressPerson.find_by_names("barney", "frank")
+      assert_equal 1, cp.length
+      assert_equal "26897", cp[0].votesmart_id
+      pp cp[0].photo_url
     end
 
     context "trying to use CRP from earlier test" do

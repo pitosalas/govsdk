@@ -17,6 +17,7 @@ require 'generic_api'
 require 'sunlight_api'
 require 'open_secrets_api'
 require 'vote_smart_api'
+require 'util'
 
 class Test::Unit::TestCase
 end

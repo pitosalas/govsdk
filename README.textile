@@ -22,13 +22,34 @@ Unfortunately for now, each of the different services request that you use it's 
 
 h2. IDs
 
-There are various IDs (identifiers assigned by some outside, real world agency to some outside real world thing) throughout the government. One you know is a drivers license number assigned to a person. Within our universe here are some of the IDs:
+There are various IDs (identifiers assigned by some outside, real world agency to some outside real world thing) throughout the government. One you know is a drivers license number assigned to a person. 
 
-# CrpId - Center for responsible politics IDs for congress persons
-	
-In many cases none of the APIs furnish a useful ID. 
+h2. Basic usage
+
+Here is a very simplistic minimal example:
+<pre>
+<code>
+# You always have to start off by declaring that you want to use Govsdk. You need to supply one or more of your API keys. 
+GovSdk.init :sunlight => "enter your API key..."
+
+#Lookup a congress person "barney" "frank". The call returns an array of matching congresspeople
+cp = CongressPerson.find_by_names("barney", "frank")
+
+# print the photo url of the first congress person matching
+puts cp[0].photo_url
+</code>
+</pre>
+
 
 h1. KEY CLASSES
+
+# CongressPerson - Work with legislators: senators and congressmen
+	
+#### self.find_by_name - return an array of CongressPersons
+#### self.find_by_zipcode - return an array of CongressPersons
+#### self.find_by_crp_id - return the CongressPerson with specified crp id
+
+h2. Internal classes
 
 # APIMgr - Parent class of each of the manager classes below
 ## NewYorkTimesAPI - Class managing access to the New York Times API
@@ -36,8 +57,11 @@ h1. KEY CLASSES
 ## SpenSecretsAPI - Class managing the OpenSecrets API
 ### Methods: setAPIKey/getAPIKey
 	
-# CongressPerson - Work with legislators: senators and congressmen
-	
-#### self.find_by_name - return an array of CongressPersons
-#### self.find_by_zipcode - return an array of CongressPersons
-#### self.find_by_crp_id - return the CongressPerson with specified crp id
+
+
+h1. Utils
+
+There are lots of simple transformations which come up in using these 
+APIs and so for convenience sake some of those are built right into this library
+
+Utils.lookup_state_name(string) -> two letter state code for that state

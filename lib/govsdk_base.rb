@@ -36,19 +36,36 @@ class GovSdkBase
   end
   
   def assume_uses_google_api
-    raise ArgumentError, "Call requires Google API and Google key" + called.shift unless GovSdk.google_api.initialized?
+    raise ArgumentError, "Call requires Google API and Google key" + caller.shift unless GovSdk.google_api.initialized?
+  end
+  
+  def self.assume_uses_sunl_api
+    raise ArgumentError, "Call requires Sunlight API, so it needs you to set the Sunlight API key" + caller.shift unless GovSdk.sunlight_api.initialized?
+  end
+
+  def assume_uses_sunl_api
+    self.assume_uses_sunl_api
   end
   
   def assume_nil_or_integer val
-    raise ArgumentError, "Requires nil or integer argument. Called from " + called.shift unless  val.nil? || val.kind_of?(Integer)
+    raise ArgumentError, "Requires nil or integer argument. Called from " + caller.shift unless  val.nil? || val.kind_of?(Integer)
   end
   
   def self.assume_hash val
-    raise ArgumentError, "Requires a hash argument. Called from " + called.shift unless val.kind_of?(Hash)
+    raise ArgumentError, "Requires a hash argument. Called from " + caller.shift unless val.kind_of?(Hash)
   end    
   
   def assume_hash val
     self.assume_hash val
   end
+  
+  def self.assume_string(val)
+    raise ArgumentError, "Requires a string argument. Called from " + caller.shift unless val.kind_of?(String)
+  end
+  
+  def assume_string(val)
+    self.assume_string val
+  end
+  
   
 end

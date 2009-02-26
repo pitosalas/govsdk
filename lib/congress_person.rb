@@ -32,7 +32,7 @@ class CongressPerson < GovSdkBase
   
   attr_reader :firstname, :lastname, :party, :state, :congress_office, :phone, :fax, :emai,
               :website, :webform, :website_url, :bioguide_id, :congresspedia_url, :state_machine_id,
-              :district, :title, :govtrack_id, :crp_id, :nickname, :votesmart_id
+              :district, :title, :govtrack_id, :crp_id, :nickname, :votesmart_id, :votesmart_id
               
   # Maps specific set of CongressPerson attributes to Sunlight APIs. Mapping is structured as
   # "name of attr in CongressPerson object" => "name of hash key in result returned from API call"
@@ -78,7 +78,16 @@ class CongressPerson < GovSdkBase
     sunlight_hash = GovSdk.sunlight_api.legislators_search(name)
     sunlight_hash.collect {|leg| convert_to_congressperson(leg["result"]["legislator"])}
   end
-
+  
+  # Return an array of Congress People, searching using first and last name
+  def self.find_by_names(firstname, lastname)
+    assume_string lastname
+    assume_string firstname
+    assume_uses_sunl_api
+    result_array = GovSdk.sunlight_api.legislators_getlist(:firstname => firstname, :lastname => lastname)
+    result_array.collect { |leg| convert_to_congressperson(leg["legislator"])}
+  end    
+    
   def self.find_by_zipcode(zip)
     raise ArgumentError, 'zipcodes must be Strings' unless zip.is_a?(String)
   end

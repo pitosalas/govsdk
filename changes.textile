@@ -6,4 +6,7 @@ h2. 0.0.2
 * Change readme etc to textile
 * Add CongreesPerson.photo_url
 * Add CongressPerson.find_blog_url
+h2. 0.0.3
+* Added Util.lookup_state_name
+
 
