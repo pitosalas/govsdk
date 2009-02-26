@@ -1,6 +1,6 @@
 =begin
-  * Name: general_examples.rb
-  * Description: Example code for GovSdk
+  * Name: src_template.rb
+  * Description: Standard header for all source files
   * Author: Pito Salas
   * Copyright: (c) R. Pito Salas and Associates, Inc.
   * Date: January 2009
@@ -25,8 +25,8 @@
   Debugger.settings[:autolist] = 1 # list nearby lines on stop
   Debugger.settings[:autoeval] = 1
   Debugger.start
+  
 =end
-
 require 'rubygems'
 require 'govsdkgem'
 
@@ -36,19 +36,20 @@ GovSdk.init :opensecrets => "09c975b6d3f19eb865805b2244311065",
             :sunlight => "4ffa22917ab1ed010a8e681c550c9593",
             :google => "ABQIAAAAyvWaJgF_91PvBZhITx5FDxRIYAcXj39F4zFQfQ2X3IEFURxvMRRUi0aCG6WofnUSRRoI-Pgytm5yUA"
 
-# All Democratic Congresspeople who have blogs. Note this will run pretty slowly :)
+# Very simply lookup and display Barney Frank's fax number
 
-congressmen = CongressPerson.find_by_query(:party => "D")
-counter = 0
-congressmen.each do |cm|
-  blog = cm.blog_url
-  if (blog.nil?)
-    counter += 1
-  else
-    puts "#{cm.firstname} #{cm.lastname} #{blog} (#{cm.state})"
-  end
+barney_frank = CongressPerson.find_by_names("barney", "frank")
+puts "Barney Frank's fax number is #{barney_frank[0].fax}"
+
+# Look for congress people with "Frank" in their name. We iterate through the resultant array
+# and display some factoids about each of the congressmen found
+
+the_franks = CongressPerson.fuzzy_find_by_name("Frank")
+the_franks.each do |cp| 
+  puts "\nCongressman: #{cp.firstname} #{cp.lastname} has crp_id #{cp.crp_id}." 
+  puts "    He or she reported holding #{cp.get_positions_held(2008).length} positions in 2008"
+  puts "    Votesmart ID is #{cp.votesmart_id}, "
+  puts "    photo can be found here: #{cp.photo_url}"
+  blog = cp.blog_url
+  puts "    Has a blog: #{blog}" unless blog.nil?
 end
-puts "A total of #{counter} congresspeople do not seem to have blogs"
-
-
-
