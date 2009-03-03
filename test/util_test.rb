@@ -29,12 +29,15 @@
 
 require File.dirname(__FILE__) + '/test_helper'
 
-class MyTest < Test::Unit::TestCase
+class UtilTest < Test::Unit::TestCase
   context "Util methods test" do
 
     should "Lookup a state" do
       assert_equal "MA", Util.lookup_state_name("Mass")
       assert_equal "MA", Util.lookup_state_name("mass")
+      assert_equal "MA", Util.lookup_state_name("MA")      
+      assert_equal "WV", Util.lookup_state_name("WV")
+      assert_equal "WV", Util.lookup_state_name("wv")
       assert_equal nil, Util.lookup_state_name("new")
       assert_equal nil, Util.lookup_state_name("pito")
     end

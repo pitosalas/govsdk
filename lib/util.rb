@@ -97,6 +97,7 @@ class Util
 # 2 letter code for state that most closely matches state_name, or nil.
 # 
   def self.lookup_state_name(state_name)
+    return state_name.upcase if STATE_ABBR.has_key?(state_name.upcase)
     matches = STATE_ABBR.select { |k,v| v.include? state_name.capitalize}
     if matches.length == 1
       return matches[0][0]
@@ -106,5 +107,7 @@ class Util
   end
 
 end
+
+
     
     
